@@ -1,0 +1,99 @@
+<?php
+
+namespace backend\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "planta".
+ *
+ * @property integer $id_curso
+ * @property integer $id_categoria
+ * @property integer $id
+ * @property integer $id_dedicacion
+ * @property string $codigo_especialidad
+ * @property string $dni
+ *
+ * @property Categorias $idCategoria
+ * @property Cursos $idCurso
+ * @property Dedicaciones $idDedicacion
+ * @property Docentes $dni0
+ * @property Especialidades $codigoEspecialidad
+ */
+class Planta extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'planta';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['id_curso', 'id_categoria', 'id_dedicacion'], 'integer'],
+            [['codigo_especialidad'], 'string', 'max' => 5],
+            [['dni'], 'string', 'max' => 10]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id_curso' => 'Id Curso',
+            'id_categoria' => 'Id Categoria',
+            'id' => 'ID',
+            'id_dedicacion' => 'Id Dedicacion',
+            'codigo_especialidad' => 'Codigo Especialidad',
+            'dni' => 'Dni',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCategoria()
+    {
+        return $this->hasOne(Categorias::className(), ['id' => 'id_categoria']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCurso()
+    {
+        return $this->hasOne(Cursos::className(), ['id' => 'id_curso']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdDedicacion()
+    {
+        return $this->hasOne(Dedicaciones::className(), ['id' => 'id_dedicacion']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDni0()
+    {
+        return $this->hasOne(Docentes::className(), ['dni' => 'dni']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCodigoEspecialidad()
+    {
+        return $this->hasOne(Especialidades::className(), ['especialidad' => 'codigo_especialidad']);
+    }
+}

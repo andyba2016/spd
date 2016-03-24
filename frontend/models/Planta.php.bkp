@@ -1,0 +1,125 @@
+<?php
+
+namespace frontend\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "planta".
+ *
+ * @property integer $id_curso
+ * @property integer $id_categoria
+ * @property integer $id
+ * @property boolean $isActive
+ * @property integer $id_dedicacion
+ * @property string $codigo_especialidad
+ * @property string $dni
+ * @property double $cantidad_dedicaciones
+ * @property double $cantidad_horas
+ * @property integer $id_revista
+ *
+ * @property Categorias $idCategoria
+ * @property Cursos $idCurso
+ * @property Dedicaciones $idDedicacion
+ * @property Docentes $dni0
+ * @property Especialidades $codigoEspecialidad
+ * @property Revista $idRevista
+ */
+class Planta extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'planta';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['id_curso', 'id_categoria', 'id_dedicacion', 'id_revista'], 'integer'],
+            [['isActive'], 'boolean'],
+            [['cantidad_dedicaciones', 'cantidad_horas'], 'number'],
+            [['codigo_especialidad'], 'string', 'max' => 5],
+            [['dni'], 'string', 'max' => 11]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id_curso' => 'Id Curso',
+            'id_categoria' => 'Id Categoria',
+            'id' => 'ID',
+            'isActive' => 'Is Active',
+            'id_dedicacion' => 'Id Dedicacion',
+            'codigo_especialidad' => 'Codigo Especialidad',
+            'dni' => 'CUIT',
+            'cantidad_dedicaciones' => 'Cantidad Dedicaciones',
+            'cantidad_horas' => 'Cantidad Horas',
+            'id_revista' => 'Id Revista',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCategoria()
+    {
+        return $this->hasOne(Categorias::className(), ['id' => 'id_categoria']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCurso()
+    {
+        return $this->hasOne(Cursos::className(), ['id' => 'id_curso']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdDedicacion()
+    {
+        return $this->hasOne(Dedicaciones::className(), ['id' => 'id_dedicacion']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDni0()
+    {
+        return $this->hasOne(Docentes::className(), ['dni' => 'dni']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCodigoEspecialidad()
+    {
+        return $this->hasOne(Especialidades::className(), ['especialidad' => 'codigo_especialidad']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdRevista()
+    {
+        return $this->hasOne(Revista::className(), ['id' => 'id_revista']);
+    }
+
+    public function getCodigo($data){
+	 $valor = Cursos::find()->where(['id' => $data->id_curso])->one();
+	 $materia = Materias::find()->where(['id' => $valor->id_materia])->one();
+	 
+	 return "<b>Materia:</b>&nbsp;".$materia->nombre."<br><b>A&ntilde;o Ac:</b>&nbsp;".$valor->anio_academico."<br><b>A&ntilde;o:&nbsp;</b>".$valor->anio."<br> <b>Comision:&nbsp;</b>".$valor->comision."<br><b>Cantidad de alumnos:</b>&nbsp;".$valor->cantidad_alumnos;
+    }
+}
